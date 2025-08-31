@@ -30,7 +30,7 @@ public class Player extends Entity{
             left1 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("player/boy_left_1.png")));
             left2 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("player/boy_left_2.png")));
             right1 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("player/boy_right_1.png")));
-            right2 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("player/boy_left_2.png")));
+            right2 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("player/boy_right_2.png")));
         } catch(IOException e){
             e.printStackTrace();
         }
@@ -44,22 +44,38 @@ public class Player extends Entity{
     }
 
     public void update(){
-        if ( keyH.upPressed ){
-            direction = "up";
-            y -= speed;
+        if(keyH.upPressed==true || keyH.downPressed == true || keyH.leftPressed == true || keyH.rightPressed==true){
+
+            if ( keyH.upPressed ){
+                direction = "up";
+                y -= speed;
+            }
+            else if (keyH.downPressed) {
+                direction = "down";
+                y += speed;
+            }
+            else if (keyH.leftPressed) {
+                direction = "left";
+                x -= speed;
+            }
+            else if (keyH.rightPressed) {
+                direction = "right";
+                x += speed;
+            }
+
+            spriteCounter++;
+
+            if(spriteCounter>15){
+                if (spriteNumber==1){
+                    spriteNumber=2;
+                }
+                else if(spriteNumber==2){
+                    spriteNumber=1;
+                }
+                spriteCounter=0;
+            }
         }
-        else if (keyH.downPressed) {
-            direction = "down";
-            y += speed;
-        }
-        else if (keyH.leftPressed) {
-            direction = "left";
-            x -= speed;
-        }
-        else if (keyH.rightPressed) {
-            direction = "right";
-            x += speed;
-        }
+
     }
 
     public void draw(Graphics2D g2D){
@@ -70,21 +86,39 @@ public class Player extends Entity{
 
         switch(direction){
             case "up":
-                image = up1;
+                if(spriteNumber == 1){
+                    image = up1;
+                }
+                if(spriteNumber == 2){
+                    image = up2;
+                }
                 break;
 
             case "down":
-                image = down1;
+                if(spriteNumber == 1){
+                    image = down1;
+                }
+                if(spriteNumber == 2){
+                    image = down2;
+                }
                 break;
             case "left":
-                image = left1;
+                if(spriteNumber == 1){
+                    image = left1;
+                }
+                if(spriteNumber == 2){
+                    image = left2;
+                }
+
                 break;
             case "right":
-                image = right1;
+                if(spriteNumber == 1){
+                    image = right1;
+                }
+                if(spriteNumber == 2){
+                    image = right2;
+                }
                 break;
-            default:
-                image = down1;
-
         }
 
         g2D.drawImage(image, x, y, gamePanel.tileSize, gamePanel.tileSize, null);
